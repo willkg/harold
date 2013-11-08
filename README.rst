@@ -27,3 +27,14 @@ Landing on Heroku
 -----------------
 
 FIXME - add directions
+
+
+Licenses
+========
+
+Harold
+    Harold is licensed under the MPLv2.
+
+bootstrap
+    bootstrap is licensed under the Apache v2 license:
+    https://github.com/twbs/bootstrap/blob/master/LICENSE
