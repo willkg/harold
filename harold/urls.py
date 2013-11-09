@@ -7,6 +7,6 @@ urlpatterns = patterns(
     '',
 
     url(r'', include('harold.base.urls')),
-
+    (r'^browserid/', include('django_browserid.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

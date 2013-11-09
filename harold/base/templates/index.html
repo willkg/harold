@@ -1,1 +1,75 @@
 {% extends "base.html" %}
+{% block content %}
+  {% if not feedback %}
+    <p>
+      {{ _('There is no feedback.') }}
+    </p>
+  {% else %}
+    <table class="table table-hover table-condensed">
+      <tbody>
+        {% for fb in feedback %}
+          <tr {% if fb.sentiment == 'happy' %}class="success"{% endif %}>
+            {% if user.is_authenticated %}
+              <td>
+                {% if fb.email %}
+                  {% if fb.closed %}
+                    <span class="label label-danger">{{ _('CLOSED') }}</span>
+                  {% else %}
+                    <span class="label label-success">{{ _('OPEN') }}</span>
+                  {% endif %}
+                {% endif %}
+              </td>
+            {% endif %}
+            <td>
+              {{ fb.sentiment }}
+            </td>
+            <td>
+              <p>
+                <a href="{% url 'base.view_feedback' fb.id %}">
+                  {{ fb.text }}
+                </a>
+              </p>
+              <p>
+                {{ _('Created on:') }} {{ fb.created_on }}
+              </p>
+              {% if user.is_authenticated %}
+                <p>
+                  {% if not fb.closed %}
+                    {{ _('Email:') }} {{ fb.email }}<br />
+                    {{ _('Assigned to:') }} {{ fb.assigned_to.email }}
+                  {% endif %}
+                </p>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if feedback.paginator.num_pages > 1 %}
+      <ul class="pagination">
+        {% if feedback.has_previous %}
+          <li><a href="?page={{ feedback.previous_page_number }}">&laquo;</a></li>
+          <li><a href="?page=1">1</a></li>
+          {% if feedback.number > 2 %}
+            <li class="disabled"><a href="#">...</a></li>
+          {% endif %}
+        {% else %}
+          <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        <li class="active"><a href="?page={{ feedback.number }}">{{ feedback.number }}</a></li>
+
+        {% if feedback.has_next %}
+          {% if feedback.number < feedback.paginator.num_pages|add:"-1" %}
+            <li class="disabled"><a href="#">...</a></li>
+          {% endif %}
+          <li><a href="?page={{ feedback.paginator.num_pages }}">{{ feedback.paginator.num_pages }}</a></li>
+          <li><a href="?page={{ feedback.next_page_number }}">next</a></li>
+        {% else %}
+          <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+  {% endif %}
+{% endblock content %}

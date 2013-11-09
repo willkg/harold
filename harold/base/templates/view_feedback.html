@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'base.index' %}">Dashboard</a></li>
+  </ol>
+
+  <dl class="dl-horizontal">
+    {% if feedback.email %}
+      <dt>{{ _('Status:') }}</dt>
+      <dd>
+        {% if feedback.closed %}
+          {{ _('CLOSED') }}
+        {% else %}
+          {{ _('OPEN') }}
+        {% endif %}
+      </dd>
+    {% endif %}
+    <dt>{{ _('Sentiment:') }}</dt>
+    <dd>{{ feedback.sentiment }}</dd>
+
+    <dt>{{ _('Text:') }}</dt>
+    <dd>{{ feedback.text }}</dd>
+
+    <dt>{{ _('Created:') }}</dt>
+    <dd>{{ feedback.created_on }}</dd>
+
+    {% if feedback.email %}
+      <dt>{{ _('Assigned to:') }}</dt>
+      <dd>
+        {% if feedback.assigned_to %}
+          {{ feedback.assigned_to.email }}
+        {% else %}
+          {{ _('No one') }}
+        {% endif %}
+      </dd>
+
+      <dt>{{ _('Notes:') }}</dt>
+      <dd>
+        <div class="well well-sm">
+          <p>
+            {{ feedback.notes|linebreaks }}
+          </p>
+          <form method="post" action="{% url 'base.modify_feedback' feedback.id %}?action=note">
+            {% csrf_token %}
+            <div class="form-group">
+              <textarea name="note" rows="5" class="form-control"></textarea>
+              <p class="help-block">{{ _('Add a note on progress') }}</p>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary btn-xs" type="submit">{{ _('Add note') }}</button>
+            </div>
+          </form>
+        </div>
+      </dd>
+
+      <dt></dt>
+      <dd>
+        {% if feedback.closed %}
+          <a class="btn btn-primary btn-xs" href="{% url 'base.modify_feedback' feedback.id %}?action=open">Open</a>
+        {% else %}
+          <a class="btn btn-primary btn-xs" href="{% url 'base.modify_feedback' feedback.id %}?action=close">Close</a>
+          <a class="btn btn-primary btn-xs" href="{% url 'base.modify_feedback' feedback.id %}?action=assign&user_id={{ user.id }}">{{ _('Take this issue') }}</a>
+        {% endif %}
+      </dd>
+
+    {% endif %}
+  </dl>
+{% endblock %}
+
+{% block footer %}{% endblock %}
