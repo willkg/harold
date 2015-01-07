@@ -12,6 +12,8 @@ Running it
 Local development
 -----------------
 
+**Not for production!**
+
 1. Create a virtual environment
 2. Run::
 
@@ -32,7 +34,8 @@ Local development
 Running on Heroku
 -----------------
 
-FIXME - add directions
+FIXME - Needs documentation including how to configure to override
+``SECRET_KEY`` and other important settings.
 
 
 Licenses
