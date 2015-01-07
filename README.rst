@@ -17,13 +17,19 @@ Local development
 
        pip install -r requirements-dev.txt
 
-3. FIXME - DB setup
+3. Set up the db. Uses `dj-database-url
+   <https://github.com/kennethreitz/dj-database-url>`_ and defaults to
+   a sqlitedb named``harold.db``. Set the database with the ``DATABASE_URL``
+   environment variable and run::
+
+       manage.py syncdb
+
 4. Start the server::
 
        manage.py runserver
 
 
-Landing on Heroku
+Running on Heroku
 -----------------
 
 FIXME - add directions
