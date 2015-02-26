@@ -27,6 +27,12 @@ BROWSERID_AUDIENCES = [
     config(
         'BROWSERID_AUDIENCES', override_value=SITE_URL, default='http://127.0.0.1:8000', type_='str')
 ]
+# FIXME: Gross.
+ADMINS = [
+    admin for admin in [
+        config('ADMINS', override_value=ADMINS, default=None, type_='str')
+    ]
+]
 
 if DATABASES is NO_VALUE:
     DATABASES = {
