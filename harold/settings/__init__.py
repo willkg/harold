@@ -5,6 +5,7 @@ SECRET_KEY = NO_VALUE
 BROWSERID_AUDIENCES = NO_VALUE
 DATABASES = NO_VALUE
 ADMINS = NO_VALUE
+DEBUG = TEMPLATE_DEBUG = NO_VALUE
 
 
 # Pull in the default settings
@@ -20,6 +21,10 @@ except ImportError:
 
 # Instance settings which should come from the environment but can
 # come from local.py.
+
+# SECURITY WARNING: don't run with debug turned on in production!
+TEMPLATE_DEBUG = config('DEBUG', override_value=TEMPLATE_DEBUG, default=True, type_='bool')
+DEBUG = config('DEBUG', override_value=DEBUG, default=True, type_='bool')
 
 SECRET_KEY = config(
     'SECRET_KEY', override_value=SECRET_KEY, type_='str')
@@ -49,4 +54,5 @@ if 'MAILGUN_API_KEY' in os.environ:
     EMAIL_PORT = config('MAILGUN_SMTP_PORT', type_='int')
     EMAIL_HOST_USER = config('MAILGUN_SMTP_LOGIN', type_='str')
     EMAIL_HOST_PASSWORD = config('MAILGUN_SMTP_PASSWORD', type_='str')
-    EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='', type_='str')
+    EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='harold', type_='str')
+    DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', type_='str')

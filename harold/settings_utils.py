@@ -37,7 +37,8 @@ def config(envvar, override_value=NO_VALUE, default=NO_VALUE, type_='str'):
     types = {
         'str': parse_identity,
         'int': parse_integer,
-        'float': parse_float
+        'float': parse_float,
+        'bool': parse_bool
     }
 
     # Prefer the override if there is one
