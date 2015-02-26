@@ -4,9 +4,12 @@ from harold.settings_utils import config, NO_VALUE
 SECRET_KEY = NO_VALUE
 BROWSERID_AUDIENCES = NO_VALUE
 DATABASES = NO_VALUE
+ADMINS = NO_VALUE
+
 
 # Pull in the default settings
 from harold.settings.defaults import *
+
 
 # Override with local.py
 try:
@@ -17,8 +20,6 @@ except ImportError:
 
 # Instance settings which should come from the environment but can
 # come from local.py.
-
-import dj_database_url
 
 SECRET_KEY = config(
     'SECRET_KEY', override_value=SECRET_KEY, type_='str')
@@ -35,6 +36,7 @@ ADMINS = [
 ]
 
 if DATABASES is NO_VALUE:
+    import dj_database_url
     DATABASES = {
         'default': dj_database_url.config(default='sqlite:///harold.db')
     }
