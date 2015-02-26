@@ -3,6 +3,8 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
+from rest_framework import serializers
+
 
 class Feedback(models.Model):
     sentiment = models.CharField(max_length=10)
@@ -22,3 +24,13 @@ class Feedback(models.Model):
             self.closed = True
 
         super(Feedback, self).save(*args, **kwargs)
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+
+        # We only want to include fields that don't have private data
+        # in them.
+        fields = ('sentiment', 'text', 'created_on')
+        write_only_fields = ('email',)
