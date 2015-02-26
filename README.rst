@@ -19,14 +19,19 @@ Local development
 
        pip install -r requirements-dev.txt
 
-3. Set up the db. Uses `dj-database-url
+3. Set up the db. Harold uses `dj-database-url
    <https://github.com/kennethreitz/dj-database-url>`_ and defaults to
-   a sqlitedb named``harold.db``. Set the database with the ``DATABASE_URL``
-   environment variable and run::
+   a sqlitedb named``harold.db``.
 
-       manage.py syncdb
+   Set the database with the ``DATABASE_URL`` environment variable.
 
-4. Start the server::
+4. Set the ``SECRET_KEY`` environment variable.
+
+5. Set up the database::
+
+       manage.py migrate
+
+6. Start the server::
 
        manage.py runserver
 
@@ -34,8 +39,16 @@ Local development
 Running on Heroku
 -----------------
 
-FIXME - Needs documentation including how to configure to override
-``SECRET_KEY`` and other important settings.
+Set the ``SECRET_KEY``::
+
+    heroku config:set SECRET_KEY=<some value>
+
+
+FIXME: More than that?
+
+Then push it to Heroku::
+
+    git push heroku master
 
 
 Licenses

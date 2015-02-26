@@ -1,108 +1,60 @@
-"""
-Django settings for harold project.
+from harold.settings_utils import config, NO_VALUE
 
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
+# Instance settings that are required
+SECRET_KEY = NO_VALUE
+BROWSERID_AUDIENCES = NO_VALUE
+DATABASES = NO_VALUE
+ADMINS = NO_VALUE
+DEBUG = TEMPLATE_DEBUG = NO_VALUE
 
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-import dj_database_url
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# Pull in the default settings
+from harold.settings.defaults import *
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_b@zcmj=1h^sr#64!u3r+9d_=kvh+r3p5pbb0g42x-t0n2wbbi'
+# Override with local.py
+try:
+    from harold.settings.local import *
+except ImportError:
+    pass
+
+
+# Instance settings which should come from the environment but can
+# come from local.py.
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+TEMPLATE_DEBUG = config('DEBUG', override_value=TEMPLATE_DEBUG, default=True, type_='bool')
+DEBUG = config('DEBUG', override_value=DEBUG, default=True, type_='bool')
 
-TEMPLATE_DEBUG = True
+SECRET_KEY = config(
+    'SECRET_KEY', override_value=SECRET_KEY, type_='str')
+# FIXME: This should be a list of strings
+BROWSERID_AUDIENCES = [
+    config(
+        'BROWSERID_AUDIENCES', override_value=BROWSERID_AUDIENCES, default='http://127.0.0.1:8000', type_='str')
+]
+# FIXME: This should be a list of strings
+ADMINS = config('ADMINS', override_value=ADMINS, default=None, type_='str')
+if ADMINS is not None:
+    admins_parts = '@'.split(admins)
+    ADMINS = [(admins_parts[0], admins)]
+else:
+    ADMINS = []
 
-ALLOWED_HOSTS = ['*']
+if DATABASES is NO_VALUE:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default='sqlite:///harold.db')
+    }
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'django_browserid.auth.BrowserIDBackend',
-)
+# Mailgun specific configuration.
+if 'MAILGUN_API_KEY' in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-SITE_URL = os.environ.get('SITE_URL', 'http://127.0.0.1:8000')
-
-LOGIN_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL_FAILURE = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-# Application definition
-
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    'django_browserid',
-
-    'harold.base',
-)
-
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
-
-ROOT_URLCONF = 'harold.urls'
-
-WSGI_APPLICATION = 'harold.wsgi.application'
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-
-    'django_browserid.context_processors.browserid',
-)
-
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': dj_database_url.config(default='sqlite:///harold.db')
-}
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+    EMAIL_HOST = config('MAILGUN_SMTP_SERVER', type_='str')
+    EMAIL_PORT = config('MAILGUN_SMTP_PORT', type_='int')
+    EMAIL_USE_TLS = EMAIL_PORT == 587
+    EMAIL_HOST_USER = config('MAILGUN_SMTP_LOGIN', type_='str')
+    EMAIL_HOST_PASSWORD = config('MAILGUN_SMTP_PASSWORD', type_='str')
+    EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='[harold] ', type_='str')
+    DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', type_='str')
