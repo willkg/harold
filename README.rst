@@ -46,6 +46,11 @@ Set the ``SECRET_KEY``::
 
 FIXME: More than that?
 
+Then push it to Heroku::
+
+    git push heroku master
+
+
 Licenses
 ========
 
