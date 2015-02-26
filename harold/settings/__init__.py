@@ -38,3 +38,13 @@ if DATABASES is NO_VALUE:
     DATABASES = {
         'default': dj_database_url.config(default='sqlite:///harold.db')
     }
+
+# Mailgun specific configuration.
+if 'MAILGUN_API_KEY' in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+    EMAIL_HOST = config('MAILGUN_SMTP_SERVER', type_='str')
+    EMAIL_PORT = config('MAILGUN_SMTP_PORT', type_='int')
+    EMAIL_HOST_USER = config('MAILGUN_SMTP_LOGIN', type_='str')
+    EMAIL_HOST_PASSWORD = config('MAILGUN_SMTP_PASSWORD', type_='str')
+    EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='', type_='str')
