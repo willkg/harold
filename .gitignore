@@ -3,3 +3,4 @@ venv
 staticfiles
 *~
 harold.db
+harold/settings/local.py
