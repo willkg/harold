@@ -26,7 +26,7 @@ SECRET_KEY = config(
 # FIXME: This should be a list of strings
 BROWSERID_AUDIENCES = [
     config(
-        'BROWSERID_AUDIENCES', override_value=SITE_URL, default='http://127.0.0.1:8000', type_='str')
+        'BROWSERID_AUDIENCES', override_value=BROWSERID_AUDIENCES, default='http://127.0.0.1:8000', type_='str')
 ]
 # FIXME: Gross.
 ADMINS = [
