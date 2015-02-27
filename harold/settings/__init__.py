@@ -54,5 +54,5 @@ if 'MAILGUN_API_KEY' in os.environ:
     EMAIL_USE_TLS = EMAIL_PORT == 587
     EMAIL_HOST_USER = config('MAILGUN_SMTP_LOGIN', type_='str')
     EMAIL_HOST_PASSWORD = config('MAILGUN_SMTP_PASSWORD', type_='str')
-    EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='harold', type_='str')
+    EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='[harold] ', type_='str')
     DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', type_='str')
