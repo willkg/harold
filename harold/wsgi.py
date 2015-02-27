@@ -55,12 +55,16 @@ Handler mixin that overrides handle_uncaught_exception to provide better debug d
             # For binary, we say, 'BINARY CONTENT'
             postbody = 'BINARY CONTENT'
 
+        # The logger.error generates a record which can get handled by the
+        # AdminEmailHandler. Overriding all that machinery seems crazy, so
+        # we're instead going to shove it in the META section.
+        request.META['HTTP_X_POST_BODY'] = postbody
+
         logger.error('Internal Server Error: %s', request.path,
             exc_info=exc_info,
             extra={
                 'status_code': 500,
-                'request': request,
-                'postbody': postbody
+                'request': request
             }
         )
 
