@@ -33,10 +33,9 @@ class BetterDebugMixin(object):
 
     It:
 
-    * adds a "postbody" section to the error logs/emails that has the first
-      10,000 bytes of the raw post content
-
-Handler mixin that overrides handle_uncaught_exception to provide better debug data
+    * spits out text rather than html when DEBUG = True (OMG! THANK YOU!)
+    * adds a "HTTP_X_POSTBODY" META variable so you can see the raw post data
+      in error emails
 
     """
     def handle_uncaught_exception(self, request, resolver, exc_info):
