@@ -34,9 +34,10 @@ BROWSERID_AUDIENCES = [
         'BROWSERID_AUDIENCES', override_value=BROWSERID_AUDIENCES, default='http://127.0.0.1:8000', type_='str')
 ]
 # FIXME: This should be a list of strings
-ADMINS = config('ADMINS', override_value=ADMINS, default=None, type_='str')
-if ADMINS is not None:
-    ADMINS = [ADMINS]
+admins = config('ADMINS', override_value=ADMINS, default=None, type_='str')
+if admins is not None:
+    admins_parts = '@'.split(admins)
+    ADMINS = [(admins_parts[0], admins)]
 
 if DATABASES is NO_VALUE:
     import dj_database_url
