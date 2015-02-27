@@ -65,6 +65,6 @@ def api_uncaught_exception_handler(fun):
 
 
 class FeedbackAPI(rest_framework.views.APIView):
-    @api_uncaught_exception_handler
+    # @api_uncaught_exception_handler
     def post(self, request):
         raise Exception('Error is here!')
