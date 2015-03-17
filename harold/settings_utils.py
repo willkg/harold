@@ -33,7 +33,7 @@ class ConfigurationError(Exception):
     pass
 
 
-def config(envvar, override_value=NO_VALUE, default=NO_VALUE, type_='str'):
+def config(envvar, default=NO_VALUE, type_='str'):
     types = {
         'str': parse_identity,
         'int': parse_integer,
@@ -41,17 +41,14 @@ def config(envvar, override_value=NO_VALUE, default=NO_VALUE, type_='str'):
         'bool': parse_bool
     }
 
-    # Prefer the override if there is one
-    if override_value is not NO_VALUE:
-        return override_value
-
-    # Check the environment
+    # Check the environment for the specified variable and use that
     val = os.environ.get(envvar, NO_VALUE)
     if val is not NO_VALUE:
         return types[type_](val)
 
-    # Try the default
+    # If there's a default, use that
     if default is not NO_VALUE:
         return default
 
+    # No value specified and no default, so raise an error to the user
     raise ConfigurationError('%s requires a value of type %s' % (envvar, type_))

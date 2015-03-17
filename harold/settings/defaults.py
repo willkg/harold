@@ -1,19 +1,35 @@
-"""
-Django settings for harold project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
+from harold.settings_utils import config, NO_VALUE
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+# Instance settings that are required to be set either from
+# environment or a settings module.
+SECRET_KEY = config('SECRET_KEY', type_='str')
+# FIXME: This should be a list of strings
+BROWSERID_AUDIENCES = [
+    config(
+        'BROWSERID_AUDIENCES', default='http://127.0.0.1:8000', type_='str')
+]
+
+# FIXME: This should be a list of strings
+ADMINS = config('ADMINS', default=None, type_='str')
+if ADMINS is not None:
+    admins_parts = '@'.split(admins)
+    ADMINS = [(admins_parts[0], admins)]
+else:
+    ADMINS = []
+
+import dj_database_url
+DATABASES = {
+    'default': dj_database_url.config(default='sqlite:///harold.db')
+}
+
+# SECURITY WARNING: don't run with debug turned on in production!
+TEMPLATE_DEBUG = config('DEBUG', default=True, type_='bool')
+DEBUG = config('DEBUG', default=True, type_='bool')
 
 ALLOWED_HOSTS = ['*']
 

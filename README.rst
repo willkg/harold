@@ -19,11 +19,12 @@ Local development
 
        pip install -r requirements-dev.txt
 
-3. Set up the db. Harold uses `dj-database-url
+3. Set up the db. YHarold uses `dj-database-url
    <https://github.com/kennethreitz/dj-database-url>`_ and defaults to
-   a sqlitedb named``harold.db``.
+   a sqlitedb named ``harold.db``.
 
-   Set the database with the ``DATABASE_URL`` environment variable.
+   If you want something different, you can set the ``DATABASE_URL``
+   environment variable.
 
 4. Set the ``SECRET_KEY`` environment variable.
 
@@ -39,10 +40,13 @@ Local development
 Running on Heroku
 -----------------
 
-Set the ``SECRET_KEY``::
+Set ``DJANGO_SETTINGS_MODULE`` env var::
+
+    heroku config:set DJANGO_SETTINGS_MODULE=harold.settings.heroku
+
+Set the ``SECRET_KEY`` env var::
 
     heroku config:set SECRET_KEY=<some value>
-
 
 FIXME: More than that?
 
