@@ -1,5 +1,5 @@
 # Appropriate for running on Heroku
-from harold.settings.defaults import *
+from harold.settings.base import *
 from harold.settings_utils import config, NO_VALUE
 
 DEBUG = TEMPLATE_DEBUG = False

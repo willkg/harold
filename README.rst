@@ -19,20 +19,11 @@ Local development
 
        pip install -r requirements-dev.txt
 
-3. Set up the db. YHarold uses `dj-database-url
-   <https://github.com/kennethreitz/dj-database-url>`_ and defaults to
-   a sqlitedb named ``harold.db``.
-
-   If you want something different, you can set the ``DATABASE_URL``
-   environment variable.
-
-4. Set the ``SECRET_KEY`` environment variable.
-
-5. Set up the database::
+3. Set up the database::
 
        manage.py migrate
 
-6. Start the server::
+4. Start the server::
 
        manage.py runserver
 
